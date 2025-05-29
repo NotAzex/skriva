@@ -1,4 +1,4 @@
-package mom.zesty.skriva.skript;
+package mom.zesty.skriva.skript.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
@@ -11,14 +11,14 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
-public class TextAfter extends SimpleExpression<String> {
+public class TextBefore extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(TextAfter.class, String.class, ExpressionType.COMBINED,
-                "[the] text after %string% in [<string|text>] %string%");
+        Skript.registerExpression(TextBefore.class, String.class, ExpressionType.COMBINED,
+                "[the] text before %string% in [<string|text>] %string%");
     }
 
-    private Expression<String> after;
+    private Expression<String> before;
     private Expression<String> full;
 
     @Override
@@ -34,22 +34,22 @@ public class TextAfter extends SimpleExpression<String> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parser) {
-        after = (Expression<String>) exprs[1];
+        before = (Expression<String>) exprs[1];
         full = (Expression<String>) exprs[0];
         return true;
     }
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "The text after";
+        return "The text before";
     }
 
     @Override
     @Nullable
     protected String[] get(Event event) {
 
-        return new String[]{Skriva.getInstance().getFileManager().getTextAfter(
-                after.getSingle(event),
+        return new String[]{Skriva.getInstance().getFileManager().getTextBefore(
+                before.getSingle(event),
                 full.getSingle(event))};
     }
 

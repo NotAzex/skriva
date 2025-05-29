@@ -1,4 +1,4 @@
-package mom.zesty.skriva.skript;
+package mom.zesty.skriva.skript.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
@@ -12,19 +12,19 @@ import org.bukkit.event.Event;
 import javax.annotation.Nullable;
 import java.io.File;
 
-public class Line extends SimpleExpression<String> {
+public class LinesThatContain extends SimpleExpression<Integer> {
 
     static {
-        Skript.registerExpression(Line.class, String.class, ExpressionType.COMBINED,
-                "[the] line %integer% <from|in> [file] %string%");
+        Skript.registerExpression(LinesThatContain.class, Integer.class, ExpressionType.COMBINED,
+                "[the] lines <that|which> <contain|contains> %string% in [file] %string%");
     }
 
+    private Expression<String> string;
     private Expression<String> path;
-    private Expression<Integer> line;
 
     @Override
-    public Class<? extends String> getReturnType() {
-        return String.class;
+    public Class<? extends Integer> getReturnType() {
+        return Integer.class;
     }
 
     @Override
@@ -35,23 +35,23 @@ public class Line extends SimpleExpression<String> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parser) {
-        line = (Expression<Integer>) exprs[0];
+        string = (Expression<String>) exprs[0];
         path = (Expression<String>) exprs[1];
         return true;
     }
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "The specified line";
+        return "The lines that contain something";
     }
 
     @Override
     @Nullable
-    protected String[] get(Event event) {
+    protected Integer[] get(Event event) {
 
         File file = Skriva.getInstance().getFileManager().getFile(path.getSingle(event));
         if (file != null) {
-            return new String[]{Skriva.getInstance().getFileManager().readLine(file, line.getSingle(event))};
+            return Skriva.getInstance().getFileManager().linesThatContainString(file, string.getSingle(event)).toArray(new Integer[0]);
         }
         return null;
     }

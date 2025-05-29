@@ -1,4 +1,4 @@
-package mom.zesty.skriva.skript;
+package mom.zesty.skriva.skript.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
@@ -10,16 +10,17 @@ import mom.zesty.skriva.Skriva;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
+import java.io.File;
 
-public class TextBefore extends SimpleExpression<String> {
+public class Line extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(TextBefore.class, String.class, ExpressionType.COMBINED,
-                "[the] text before %string% in [<string|text>] %string%");
+        Skript.registerExpression(Line.class, String.class, ExpressionType.COMBINED,
+                "[the] line %integer% <from|in> [file] %string%");
     }
 
-    private Expression<String> before;
-    private Expression<String> full;
+    private Expression<String> path;
+    private Expression<Integer> line;
 
     @Override
     public Class<? extends String> getReturnType() {
@@ -34,23 +35,25 @@ public class TextBefore extends SimpleExpression<String> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parser) {
-        before = (Expression<String>) exprs[1];
-        full = (Expression<String>) exprs[0];
+        line = (Expression<Integer>) exprs[0];
+        path = (Expression<String>) exprs[1];
         return true;
     }
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "The text before";
+        return "The specified line";
     }
 
     @Override
     @Nullable
     protected String[] get(Event event) {
 
-        return new String[]{Skriva.getInstance().getFileManager().getTextBefore(
-                before.getSingle(event),
-                full.getSingle(event))};
+        File file = Skriva.getInstance().getFileManager().getFile(path.getSingle(event));
+        if (file != null) {
+            return new String[]{Skriva.getInstance().getFileManager().readLine(file, line.getSingle(event))};
+        }
+        return null;
     }
 
 }

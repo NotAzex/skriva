@@ -1,4 +1,4 @@
-package mom.zesty.skriva.skript;
+package mom.zesty.skriva.skript.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
