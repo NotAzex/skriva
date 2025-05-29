@@ -23,7 +23,7 @@ public class LoadSkript {
             }
 
         } else {
-            Skriva.getInstance().getLogger().info("Skript wasn't detected, this plugin will not do anything.");
+            Skriva.getInstance().getLogger().info("Skript wasn't detected, this plugin won't do anything");
         }
 
     }
