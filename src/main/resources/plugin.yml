@@ -1,0 +1,8 @@
+name: Skriva
+version: '1.0'
+main: mom.zesty.skriva.Skriva
+api-version: '1.20'
+prefix: Skriva
+authors: [ Azex ]
+description: File inspecting/modifying helper for Skript.
+website: https://discord.gg/nKEa5NxRew
