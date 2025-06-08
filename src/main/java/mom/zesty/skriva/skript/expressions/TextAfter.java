@@ -48,8 +48,8 @@ public class TextAfter extends SimpleExpression<String> {
     @Nullable
     protected String[] get(Event event) {
         String result = Skriva.getInstance().getFileManager().getTextAfter(
-                after.getSingle(event),
-                full.getSingle(event));
+                full.getSingle(event),
+                after.getSingle(event));
 
         if (result == null) {
             return null;

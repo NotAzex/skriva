@@ -62,7 +62,7 @@ public class FileManager {
     public String readLine(File file, int line) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            for (int i = 0; i < line; i++) {
+            for (int i = 1; i < line; i++) {
                 reader.readLine();
             }
 

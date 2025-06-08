@@ -48,8 +48,8 @@ public class TextBefore extends SimpleExpression<String> {
     @Nullable
     protected String[] get(Event event) {
         String result = Skriva.getInstance().getFileManager().getTextBefore(
-                before.getSingle(event),
-                full.getSingle(event));
+                full.getSingle(event),
+                before.getSingle(event));
 
         if (result == null) {
             return null;
