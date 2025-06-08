@@ -15,7 +15,7 @@ public class FileExists extends SimpleExpression<Boolean> {
 
     static {
         Skript.registerExpression(FileExists.class, Boolean.class, ExpressionType.COMBINED,
-                "does [the] [file] %string% exist");
+                "[the] [file] %string% exist[s]");
     }
 
     private Expression<String> path;

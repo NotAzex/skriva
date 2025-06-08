@@ -47,10 +47,15 @@ public class TextBefore extends SimpleExpression<String> {
     @Override
     @Nullable
     protected String[] get(Event event) {
-
-        return new String[]{Skriva.getInstance().getFileManager().getTextBefore(
+        String result = Skriva.getInstance().getFileManager().getTextBefore(
                 before.getSingle(event),
-                full.getSingle(event))};
+                full.getSingle(event));
+
+        if (result == null) {
+            return null;
+        }
+
+        return new String[]{result};
     }
 
 }

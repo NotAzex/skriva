@@ -11,8 +11,8 @@ public final class Skriva extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        fileManager = new FileManager();
         instance = this;
+        fileManager = new FileManager();
         loading.load();
     }
 

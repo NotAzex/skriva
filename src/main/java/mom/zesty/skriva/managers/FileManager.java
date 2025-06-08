@@ -3,55 +3,59 @@ package mom.zesty.skriva.managers;
 import mom.zesty.skriva.Skriva;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class FileManager {
 
+    private final Logger logger;
+
+    public FileManager() {
+        this.logger = Skriva.getInstance().getLogger();
+    }
+
     public File getFile(String path) {
-
         File file = new File(path);
-
-        if (file.exists()) {
-            return new File(path);
-        } return null;
+        return file.exists() ? file : null;
     }
 
     public boolean fileExists(String path) {
-
-        File file = new File(path);
-        return file.exists();
-
+        return Files.exists(Paths.get(path));
     }
 
     public void createFile(String path) {
 
-        File file = new File(path);
-        file.getParentFile().mkdirs();
+        Path filePath = Paths.get(path);
 
         try {
-            file.createNewFile();
+            Files.createDirectories(filePath.getParent());
+            Files.createFile(filePath);
+        } catch (FileAlreadyExistsException ignored) {
         } catch (IOException e) {
-            Skriva.getInstance().getLogger().info("Failed to create file " + file + " due to " + e.getMessage());
+            logger.info("Failed to create file " + filePath + " due to " + e.getMessage());
         }
 
     }
 
     public void deleteFile(String path) {
-        File file = new File(path);
-        file.delete();
+
+        try {
+            Files.deleteIfExists(Paths.get(path));
+        } catch (IOException e) {
+            logger.info("Failed to delete file " + path + " due to " + e.getMessage());
+        }
+
     }
 
     public void writeInFile(File file, String content) {
         try {
-            FileWriter writer = new FileWriter(file, true);
-            writer.write(System.lineSeparator() + content);
-            writer.close();
+            Files.writeString(file.toPath(),
+                    System.lineSeparator() + content,
+                    StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
-            Skriva.getInstance().getLogger().info("Failed to write in file " + file + " due to " + e.getMessage());
+            logger.info("Failed to write in file " + file + " due to " + e.getMessage());
         }
     }
 
@@ -93,23 +97,19 @@ public class FileManager {
             writer.close();
 
         } catch (IOException e) {
-            Skriva.getInstance().getLogger().info("Failed to set line in file " + file + " due to " + e.getMessage());
+            logger.info("Failed to set line in file " + file + " due to " + e.getMessage());
         }
     }
 
     public String getTextBefore(String before, String full) {
-        int index = before.indexOf(full);
-        if (index != -1) {
-            return before.substring(0, index);
-        }
+        int index = full.indexOf(before);
+        if (index != -1) { return full.substring(0, index); }
         return null;
     }
 
     public String getTextAfter(String after, String full) {
-        int index = after.indexOf(full);
-        if (index != -1) {
-            return after.substring(index + full.length());
-        }
+        int index = full.indexOf(after);
+        if (index != -1) { return full.substring(index + after.length()); }
         return null;
     }
 
@@ -150,7 +150,7 @@ public class FileManager {
             Files.move(temp, path, StandardCopyOption.REPLACE_EXISTING);
 
         } catch (IOException e) {
-            Skriva.getInstance().getLogger().info("Failed to replace content in file " + file + " due to " + e.getMessage());
+            logger.info("Failed to replace content in file " + file + " due to " + e.getMessage());
         }
     }
 

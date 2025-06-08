@@ -47,10 +47,15 @@ public class TextAfter extends SimpleExpression<String> {
     @Override
     @Nullable
     protected String[] get(Event event) {
-
-        return new String[]{Skriva.getInstance().getFileManager().getTextAfter(
+        String result = Skriva.getInstance().getFileManager().getTextAfter(
                 after.getSingle(event),
-                full.getSingle(event))};
+                full.getSingle(event));
+
+        if (result == null) {
+            return null;
+        }
+
+        return new String[]{result};
     }
 
 }

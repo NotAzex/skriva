@@ -12,18 +12,20 @@ public class LoadSkript {
 
     public void load() {
 
+        Skriva instance = Skriva.getInstance();
+
         if (Bukkit.getPluginManager().isPluginEnabled("Skript")) {
-            addon = Skript.registerAddon(Skriva.getInstance());
+            addon = Skript.registerAddon(instance);
 
             try {
-                Skriva.getInstance().getLogger().info("Loading Skript elements!");
+                instance.getLogger().info("Loading Skript elements!");
                 addon.loadClasses("mom.zesty.skriva.skript");
             } catch (IOException e) {
-                Skriva.getInstance().getLogger().info("Failed to load Skript elements due to " + e.getMessage());
+                instance.getLogger().info("Failed to load Skript elements due to " + e.getMessage());
             }
 
         } else {
-            Skriva.getInstance().getLogger().info("Skript wasn't detected, this plugin won't do anything");
+            instance.getLogger().info("Skript wasn't detected, please install it to make use of this plugin/addon.");
         }
 
     }
